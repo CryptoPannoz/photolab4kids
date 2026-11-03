@@ -59,15 +59,25 @@ if (['localhost', '127.0.0.1'].includes(location.hostname) || new URLSearchParam
   else img.addEventListener('load', parti, { once: true });
 })();
 
-// «Guarda»: conta i secondi passati davanti alla fotografia, poi fa la domanda e mostra i disegni
+// Il flusso di immagini: quando si avvicina carica tutte le foto, anche quelle ancora fuori dal bordo
+(() => {
+  const flusso = document.querySelector('.flusso');
+  if (!flusso) return;
+  const osserva = new IntersectionObserver(([voce]) => {
+    if (!voce.isIntersecting) return;
+    flusso.querySelectorAll('img[loading="lazy"]').forEach((img) => { img.loading = 'eager'; });
+    osserva.disconnect();
+  }, { rootMargin: '600px 0px' });
+  osserva.observe(flusso);
+})();
+
+// «Guarda»: dopo qualche secondo davanti alla fotografia arrivano la domanda e i disegni
 (() => {
   const foto = document.querySelector('[data-sguardo]');
   if (!foto) return;
-  const testo = foto.querySelector('[data-sguardo-testo]');
   const domanda = document.querySelector('[data-sguardo-domanda]');
   const disegni = document.querySelector('[data-sguardo-disegni]');
-  let secondi = 0;
-  let visibile = false;
+  let attesa = null;
   let svelato = false;
 
   const svela = () => {
@@ -77,50 +87,78 @@ if (['localhost', '127.0.0.1'].includes(location.hostname) || new URLSearchParam
     setTimeout(() => disegni.classList.add('visibile'), 1200);
   };
 
-  setInterval(() => {
-    if (!visibile || document.hidden) return;
-    secondi += 1;
-    testo.textContent = `La stai guardando da ${secondi} ${secondi === 1 ? 'secondo' : 'secondi'}`;
-    if (secondi === 7) svela();
-  }, 1000);
-
-  new IntersectionObserver(([voce]) => { visibile = voce.isIntersecting; }, { threshold: 0.6 }).observe(foto);
+  new IntersectionObserver(([voce]) => {
+    clearTimeout(attesa);
+    if (voce.isIntersecting) attesa = setTimeout(svela, 3500);
+  }, { threshold: 0.6 }).observe(foto);
   // chi scorre oltre senza fermarsi trova comunque i disegni
   new IntersectionObserver(([voce]) => { if (voce.isIntersecting) svela(); }, { threshold: 0.5 }).observe(disegni);
 })();
 
-// «La metà che manca»: il cursore toglie il foglio bianco dalla metà disegnata
+// «La metà che manca»: la forbice taglia via il foglio bianco trascinandola (o scorrendo col dito) verso destra
 (() => {
   const opera = document.querySelector('[data-meta]');
   if (!opera) return;
   const img = opera.querySelector('[data-meta-img]');
+  const velo = opera.querySelector('.meta__velo');
   const cursore = document.querySelector('[data-meta-cursore]');
   const risposta = document.querySelector('[data-meta-risposta]');
   const bottoni = document.querySelectorAll('.meta__scelta button');
+  let gesto = null;
 
   const aggiorna = () => {
     opera.style.setProperty('--svela', cursore.value);
-    risposta.classList.toggle('visibile', Number(cursore.value) > 60);
+    risposta.classList.toggle('visibile', Number(cursore.value) > 50);
+  };
+  const imposta = (valore, animato) => {
+    opera.classList.toggle('anima', animato);
+    cursore.value = Math.round(Math.min(100, Math.max(0, valore)));
+    aggiorna();
   };
 
   cursore.addEventListener('input', () => {
-    opera.classList.remove('anima');
-    aggiorna();
+    opera.classList.add('toccata');
+    imposta(cursore.value, false);
   });
 
-  // un clic sull'opera apre o richiude la metà nascosta
-  opera.addEventListener('click', () => {
-    opera.classList.add('anima');
-    cursore.value = Number(cursore.value) > 50 ? 0 : 100;
-    aggiorna();
+  // trascinamento relativo: conta lo spostamento del dito, non il punto in cui si appoggia
+  opera.addEventListener('pointerdown', (e) => {
+    if (e.button > 0) return;
+    gesto = { x: e.clientX, partenza: Number(cursore.value), mosso: false, id: e.pointerId };
   });
+  opera.addEventListener('pointermove', (e) => {
+    if (!gesto || e.pointerId !== gesto.id) return;
+    const dx = e.clientX - gesto.x;
+    if (!gesto.mosso) {
+      if (Math.abs(dx) < 6) return;
+      gesto.mosso = true;
+      opera.setPointerCapture(e.pointerId);
+      opera.classList.add('toccata', 'trascina');
+    }
+    imposta(gesto.partenza + (dx / velo.offsetWidth) * 100, false);
+  });
+  const fine = (e) => {
+    if (!gesto || e.pointerId !== gesto.id) return;
+    const valore = Number(cursore.value);
+    if (!gesto.mosso && e.type === 'pointerup') {
+      // un tocco senza trascinare apre o richiude la metà nascosta
+      opera.classList.add('toccata');
+      imposta(valore > 50 ? 0 : 100, true);
+    } else if (gesto.mosso) {
+      // uno swipe finisce da solo: verso destra apre tutto, verso sinistra richiude
+      const destra = e.clientX >= gesto.x;
+      imposta(destra ? (valore > 20 ? 100 : 0) : (valore < 80 ? 0 : 100), true);
+    }
+    opera.classList.remove('trascina');
+    gesto = null;
+  };
+  opera.addEventListener('pointerup', fine);
+  opera.addEventListener('pointercancel', fine);
 
   bottoni.forEach((bottone) => bottone.addEventListener('click', () => {
     bottoni.forEach((b) => b.setAttribute('aria-pressed', String(b === bottone)));
     const { src, w, h, alt, lato, taglio } = bottone.dataset;
-    opera.classList.remove('anima');
-    cursore.value = 0;
-    aggiorna();
+    imposta(0, false);
     Object.assign(img, { src, width: w, height: h, alt });
     opera.dataset.lato = lato;
     opera.style.setProperty('--taglio', `${taglio}%`);

@@ -16,10 +16,11 @@ Il sito ne fa il suo linguaggio:
 - **Copertina**: come il libro stampato, con il serpente metà fotografia e metà disegno. All'apertura il serpente si
   ricompone a strisce (il disegno arriva da sinistra, la foto da destra) e poi ondeggia; senza JS o con «riduci
   movimento» resta l'immagine ferma.
-- **Guarda**: il sito conta i secondi passati davanti a una fotografia, poi chiede se si è vista la persona
-  nella radura e mostra come l'hanno disegnata due bambini. È l'obiettivo del laboratorio (soffermarsi,
-  leggere le immagini) fatto provare a chi legge.
-- **La metà che manca**: un foglio bianco copre la metà disegnata; il cursore a forbice lo toglie.
+- **Guarda**: due nastri di fotografie dei reportage di Vittoria scorrono come un feed; poi il sito chiede di
+  fermarsi su una sola foto e, dopo qualche secondo, domanda se si è vista la persona nella radura e mostra come
+  l'hanno disegnata due bambini. È l'obiettivo del laboratorio (soffermarsi, leggere le immagini) fatto provare.
+- **La metà che manca**: un foglio bianco copre la metà disegnata; la forbice sulla foto si trascina (o si
+  scorre col dito) verso destra e taglia via il foglio. Uno swipe finisce da solo, un tocco apre e richiude.
 - **I capitoli delle opere** hanno i colori delle sezioni del libro: salvia (la metà che manca), carta (io la
   vedo così), rosa (collage), confetto (autoritratti), lavagna (dentro di me c'è), bianco con stelle d'oro
   (ogni sogno merita spazio).
@@ -27,7 +28,8 @@ Il sito ne fa il suo linguaggio:
 - **Formati**: tre rullini (36, 24, 12 pose) per i percorsi di 6 mesi, 3 mesi e un weekend.
 
 Testi: dal PDF del libro (`../PHOTOLAB4KIDS.pdf`, Canva, agosto 2026) e dal racconto di Vittoria. Foto, biografia e
-contatti di Vittoria dal suo sito (vittorialorenzetti.com/about); logo dal sito della Fondazione Comoli Ferrari.
+contatti di Vittoria dal suo sito (vittorialorenzetti.com/about), come le 22 foto del flusso (`flusso-NN.webp`);
+logo dal sito della Fondazione Comoli Ferrari.
 
 ## Immagini
 
