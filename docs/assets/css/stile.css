@@ -293,6 +293,10 @@ section, .piede { scroll-margin-top: 60px; }
   .copertina__frase { order: 2; margin-top: 8px; }
   .copertina__serpente { margin-top: 12px; }
 }
+@media (max-width: 420px) {
+  /* «Photolab» è largo circa 4,6 volte il corpo: così sta nello schermo anche sotto i 360 px */
+  .copertina__titolo { font-size: calc((100vw - 40px) / 4.6); }
+}
 .copertina__frase strong { font-weight: 600; color: var(--verde); }
 .copertina__giu {
   justify-self: start;
