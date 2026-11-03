@@ -1,6 +1,60 @@
 // Photolab for Kids — piccole interazioni. Senza JS il sito mostra tutto lo stesso.
 document.documentElement.classList.add('js');
 
+// Copertina: il serpente si ricompone a strisce (il disegno dalla coda, la foto dalla testa) e poi ondeggia
+(() => {
+  const figura = document.querySelector('.copertina__serpente');
+  if (!figura || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const img = figura.querySelector('img');
+  const STRISCE = 40;
+  const GIUNTURA = 0.53; // da qui in poi l'immagine è fotografia
+  const caso = (min, max) => min + Math.random() * (max - min);
+
+  const strato = document.createElement('div');
+  strato.className = 'serpente-anim';
+  strato.setAttribute('aria-hidden', 'true');
+  const strisce = Array.from({ length: STRISCE }, (_, i) => {
+    const striscia = document.createElement('span');
+    const foto = i / STRISCE >= GIUNTURA;
+    const passo = foto ? STRISCE - 1 - i : i;
+    striscia.style.setProperty('--i', i);
+    striscia.style.setProperty('--amp', `${((1 - i / STRISCE) * 2.6 + 0.5).toFixed(2)}%`);
+    striscia.style.setProperty('--dx', `${(foto ? 1 : -1) * caso(40, 160)}px`);
+    striscia.style.setProperty('--dy', `${caso(-60, 60)}px`);
+    striscia.style.setProperty('--rot', `${caso(-25, 25)}deg`);
+    striscia.style.setProperty('--ritardo', `${passo * 35}ms`);
+    strato.append(striscia);
+    return striscia;
+  });
+
+  // misure di layout (offsetWidth ignora la rotazione della figura)
+  const disponi = () => {
+    const larghezza = img.offsetWidth;
+    const altezza = img.offsetHeight;
+    const passo = larghezza / STRISCE;
+    strisce.forEach((striscia, i) => Object.assign(striscia.style, {
+      left: `${i * passo}px`,
+      width: `${Math.ceil(passo) + 1}px`,
+      backgroundSize: `${larghezza}px ${altezza}px`,
+      backgroundPosition: `${-i * passo}px 0`,
+    }));
+  };
+
+  const parti = () => {
+    const url = `url("${img.currentSrc || img.src}")`;
+    strisce.forEach((striscia) => { striscia.style.backgroundImage = url; });
+    disponi();
+    figura.append(strato);
+    figura.classList.add('animato');
+    requestAnimationFrame(() => requestAnimationFrame(() => figura.classList.add('composto')));
+  };
+
+  new ResizeObserver(disponi).observe(img);
+  new IntersectionObserver(([voce]) => strato.classList.toggle('fermo', !voce.isIntersecting)).observe(figura);
+  if (img.complete) parti();
+  else img.addEventListener('load', parti, { once: true });
+})();
+
 // «Guarda»: conta i secondi passati davanti alla fotografia, poi fa la domanda e mostra i disegni
 (() => {
   const foto = document.querySelector('[data-sguardo]');

@@ -256,10 +256,36 @@ section, .piede { scroll-margin-top: 60px; }
   border-left: 1.5px solid currentColor;
 }
 .copertina__frase {
+  align-self: start;
   font-size: clamp(22px, 1.1rem + 1.2vw, 34px);
   line-height: 1.2;
-  margin: 0 0 0.4em;
+  margin: 0.35em 0 0;
   max-width: 17ch;
+}
+
+/* Il serpente si ricompone a strisce (il disegno da sinistra, la foto da destra), poi ondeggia */
+.serpente-anim { position: absolute; inset: 0; pointer-events: none; }
+.serpente-anim span {
+  position: absolute; top: 0; height: 100%;
+  background-repeat: no-repeat;
+  will-change: transform;
+  translate: var(--dx) var(--dy);
+  rotate: var(--rot);
+  opacity: 0;
+  transition:
+    translate 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) var(--ritardo),
+    rotate 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) var(--ritardo),
+    opacity 0.5s var(--ritardo);
+  animation: onda 1.8s ease-in-out calc(var(--i) * -60ms) infinite alternate;
+}
+.serpente-anim.fermo span { animation-play-state: paused; }
+.copertina__serpente.composto .serpente-anim span { translate: 0 0; rotate: 0deg; opacity: 1; }
+.copertina__serpente.animato img { opacity: 0; animation: none; }
+.copertina__serpente.animato .nota { opacity: 0; transition: opacity 0.8s 2.4s; }
+.copertina__serpente.composto .nota { opacity: 1; }
+@keyframes onda {
+  from { transform: translateY(calc(var(--amp) * -1)); }
+  to { transform: translateY(var(--amp)); }
 }
 @media (max-width: 860px) {
   .copertina__testa { grid-template-columns: 1fr; }
@@ -677,24 +703,100 @@ section, .piede { scroll-margin-top: 60px; }
   transform: rotate(var(--r, 0deg));
   text-shadow: 0 0 1px rgb(255 255 255 / 0.7), 1px 0 2px rgb(255 255 255 / 0.25);
 }
-.dentro__lavagna { width: min(460px, 100%); margin: 0 auto; opacity: 0.9; transform: rotate(-2deg); }
+.dentro__lavagne {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 4vw, 64px);
+  max-width: 900px;
+  margin: 64px auto 0;
+}
+.dentro__lavagne img { box-shadow: 0 24px 50px rgb(0 0 0 / 0.5); }
+.dentro__lavagne img:first-child { transform: rotate(-2.5deg); }
+.dentro__lavagne img:last-child { transform: rotate(2deg) translateY(32px); }
 @media (max-width: 760px) { .dentro__colonne { grid-template-columns: 1fr; } }
+
+/* Provino: i ritratti in fila su una striscia di pellicola, con il numero del fotogramma */
+.provino { margin: clamp(56px, 8vw, 104px) 0 0; --buco: var(--lavagna); }
+.provino--bianco { --buco: #fff; }
+.provino__fotogrammi {
+  list-style: none; margin: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--colonne, 7), 1fr);
+  gap: 12px 8px;
+  padding: 30px 12px;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 9px, var(--buco) 9px 19px, transparent 19px 28px) 0 9px / 100% 9px no-repeat,
+    repeating-linear-gradient(90deg, transparent 0 9px, var(--buco) 9px 19px, transparent 19px 28px) 0 calc(100% - 9px) / 100% 9px no-repeat,
+    #0c0d0f;
+  border-radius: 3px;
+}
+.provino--bianco .provino__fotogrammi { --colonne: 9; }
+.provino__fotogrammi li { position: relative; }
+.provino__fotogrammi img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 2px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.provino--bianco img { aspect-ratio: 3 / 4; }
+.provino__fotogrammi li:hover img { position: relative; z-index: 1; transform: scale(1.5); box-shadow: 0 10px 30px rgb(0 0 0 / 0.6); }
+.provino__fotogrammi span {
+  display: block;
+  margin-top: 5px;
+  font-family: var(--grotesk);
+  font-stretch: 75%;
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.15em;
+  color: var(--pellicola);
+}
+.provino__fotogrammi span::before { content: "▸ "; }
+.provino figcaption {
+  margin-top: 14px;
+  font-family: var(--grotesk);
+  font-stretch: 75%;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+@media (max-width: 760px) {
+  .provino__fotogrammi { --colonne: 5; }
+  .provino--bianco .provino__fotogrammi { --colonne: 6; }
+  .provino__fotogrammi li:hover img { transform: none; box-shadow: none; }
+}
 
 /* Ogni sogno merita spazio */
 .sogni {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  grid-template-areas: "testo a" "b c";
+  grid-template-columns: 1fr 1.15fr;
   gap: clamp(24px, 5vw, 72px);
   align-items: center;
 }
-.sogni__testo { grid-area: testo; }
-.sogni__a { grid-area: a; transform: rotate(2deg); }
-.sogni__b { grid-area: b; transform: rotate(-1.5deg); box-shadow: 0 14px 34px rgb(0 0 0 / 0.15); }
-.sogni__c { grid-area: c; width: 70%; justify-self: center; transform: rotate(4deg); }
-@media (max-width: 760px) {
-  .sogni { grid-template-columns: 1fr; grid-template-areas: "testo" "a" "b" "c"; }
+.sogni img, .sogni__fila img { box-shadow: 0 16px 40px rgb(60 40 0 / 0.16); }
+.sogni__a { transform: rotate(2deg); }
+.sogni__fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.75fr;
+  gap: clamp(20px, 3vw, 44px);
+  align-items: center;
+  margin-top: clamp(48px, 7vw, 96px);
 }
+.sogni__fila > img:nth-child(1) { transform: rotate(-1.5deg); }
+.sogni__fila > img:nth-child(2) { transform: rotate(1.2deg) translateY(20px); }
+.sogni__scritte { display: grid; gap: 24px; justify-items: center; }
+.sogni__scritte img { box-shadow: none; }
+.sogni__scritte img:first-child { transform: rotate(-2deg); box-shadow: 0 14px 34px rgb(0 0 0 / 0.15); }
+.sogni__scritte img:last-child { width: 80%; transform: rotate(4deg); }
+@media (max-width: 860px) {
+  .sogni { grid-template-columns: 1fr; }
+  .sogni__fila { grid-template-columns: 1fr 1fr; }
+  .sogni__scritte { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; align-items: center; }
+}
+@media (max-width: 560px) { .sogni__fila { grid-template-columns: 1fr; } .sogni__fila > img:nth-child(2) { transform: rotate(1.2deg); } }
 
 /* ——— Il libro, sul tessuto delle foto ——— */
 .libro {
@@ -787,7 +889,8 @@ section, .piede { scroll-margin-top: 60px; }
 .sostieni :focus-visible { outline-color: var(--carta); }
 .sostenitori { border-top: 1.5px solid rgb(245 242 232 / 0.5); padding-top: 24px; }
 .sostenitori h3 { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 20px; letter-spacing: 0; margin-bottom: 12px; color: rgb(245 242 232 / 0.85); }
-.sostenitori__nome { font-family: var(--grotesk); font-weight: 800; font-size: clamp(36px, 4vw, 56px); line-height: 1; letter-spacing: -0.03em; }
+.sostenitori__logo { display: inline-block; margin-top: 8px; }
+.sostenitori__logo img { width: min(340px, 100%); }
 @media (max-width: 760px) { .sostieni__colonne { grid-template-columns: 1fr; } }
 
 /* ——— Chi lo ha ideato ——— */
@@ -798,9 +901,15 @@ section, .piede { scroll-margin-top: 60px; }
   align-items: center;
   padding: var(--sezione) max(var(--margine), calc((100% - var(--larghezza)) / 2));
 }
-.segnaposto--ritratto { margin: 0; aspect-ratio: 4 / 5; display: grid; place-content: center; text-align: center; }
+.autrice__foto { margin: 0; }
+.autrice__foto img { width: 100%; box-shadow: 0 24px 60px rgb(27 29 31 / 0.25); }
 .autrice h2 { max-width: none; }
-@media (max-width: 760px) { .autrice { grid-template-columns: 1fr; } .segnaposto--ritratto { max-width: 320px; } }
+.autrice__testo > p:not(.grande):not(.etichetta) { color: var(--inchiostro-tenue); max-width: 60ch; }
+.autrice__link, .piede__contatti { display: flex; flex-wrap: wrap; gap: 12px 28px; font-family: var(--grotesk); font-weight: 600; font-size: 17px; }
+.autrice__link a, .piede__contatti a { text-decoration: none; border-bottom: 1.5px solid currentColor; padding-bottom: 2px; }
+.autrice__link a { color: var(--verde); }
+.piede > .piede__contatti { font-size: clamp(18px, 1rem + 0.6vw, 22px); color: var(--carta); }
+@media (max-width: 760px) { .autrice { grid-template-columns: 1fr; } .autrice__foto { max-width: 420px; } }
 
 /* ——— Piede ——— */
 .piede {

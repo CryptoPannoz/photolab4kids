@@ -3,9 +3,9 @@
 Uso:  python3 -I tools/prepara-immagini.py ../PHOTOLAB4KIDS.pdf
 Serve: pip install pymupdf pillow numpy
 
-Finiscono nel sito SOLO le immagini in ELENCO. Le fotografie in cui gli alunni sono riconoscibili (ritratti delle
-pagine 34-44 del PDF) restano fuori finché non ci sono le liberatorie delle famiglie per la pubblicazione sul web:
-il repo è pubblico, quindi non vanno nemmeno committate.
+Finiscono nel sito SOLO le immagini in ELENCO, GRIGLIE e FOTO_LIBRO. I ritratti degli alunni (pagine 34-44) ci sono
+dal 03/11/2026, quando Vittoria ha confermato liberatorie delle famiglie e contratto con la scuola. I nomi scritti sui
+disegni restano tagliati.
 """
 import sys
 from pathlib import Path
@@ -25,7 +25,6 @@ ELENCO = {
     # copertina e «Immaginare ciò che non si vede»
     "serpente": (1, 388, {"lato": 1800}),
     "rana": (3, 399, {}),
-    "fiori-meta": (4, 404, {}),
     # «Una fotografia tagliata a metà»: metà foto, metà disegno
     "meta-uomo-1": (5, 410, {}),
     "meta-uomo-2": (9, 429, {}),
@@ -74,11 +73,21 @@ ELENCO = {
     "autoritratto-10": (32, 552, {"lato": 900}),
     # «Dentro di me c'è…»: solo le scritte a gesso, senza volti
     "gesso-titolo": (33, 559, {}),
-    "gesso-parole": (35, 602, {}),
     # «Ogni sogno merita spazio»: solo scritte e disegni, senza volti
-    "sogno-esplorare": (39, 621, {}),
     "sogno-aiutare": (41, 666, {}),
     "sogno-stelle": (41, 667, {}),
+    # Laboratorio ritratto: lavagne «Dentro di me c'è» e ritratti «da grande»
+    "lavagna-1": (36, 608, {}),
+    "lavagna-2": (37, 613, {}),
+    "sogno-ritratto-1": (42, 673, {}),
+    "sogno-ritratto-2": (43, 678, {}),
+    "sogno-ritratto-3": (44, 683, {}),
+}
+
+# Provini dei ritratti: nome → pagina; ogni foto della griglia diventa nome-01, nome-02… in ordine di lettura
+GRIGLIE = {
+    "ritratto-nero": 34,
+    "ritratto-bianco": 40,
 }
 
 
@@ -172,6 +181,17 @@ def main(pdf):
         else:
             x0, y0, x1, y1 = zip(*riquadri)
             salva(img.crop((min(x0), min(y0), max(x1), max(y1))), nome, lato)
+    for nome, pagina in GRIGLIE.items():
+        page = doc[pagina - 1]
+        viste, foto = set(), []
+        for info in page.get_image_info(xrefs=True):
+            if info["xref"] and info["xref"] not in viste:
+                viste.add(info["xref"])
+                foto.append(info)
+        # le righe di Canva sono sfalsate di qualche punto: si raggruppano per fasce di 33 pt
+        foto.sort(key=lambda i: (round(i["bbox"][1] / 33), i["bbox"][0]))
+        for k, info in enumerate(foto, 1):
+            salva(raddrizza(carica(doc, info["xref"]), page, info["xref"]), f"{nome}-{k:02d}", 600)
     for nome, (file, riquadro) in FOTO_LIBRO.items():
         salva(Image.open(Path(pdf).parent / file).crop(riquadro), nome, 1400)
 
