@@ -1,5 +1,9 @@
 // Photolab for Kids — piccole interazioni. Senza JS il sito mostra tutto lo stesso.
 document.documentElement.classList.add('js');
+// in bozza (anteprima locale o ?bozza) si vedono i promemoria gialli «da completare»
+if (['localhost', '127.0.0.1'].includes(location.hostname) || new URLSearchParams(location.search).has('bozza')) {
+  document.documentElement.classList.add('bozza');
+}
 
 // Copertina: il serpente si ricompone a strisce (il disegno dalla coda, la foto dalla testa) e poi ondeggia
 (() => {

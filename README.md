@@ -4,9 +4,9 @@ Sito del laboratorio di fotografia e creatività ideato da Vittoria Lorenzetti p
 secondaria di primo grado. Sito statico in `docs/`: HTML, CSS e JS senza dipendenze, font self-hosted
 (Bricolage Grotesque e Newsreader), nessuna chiamata a terze parti, nessun cookie.
 
-**Stato**: scheletro del 03/11/2026, con `noindex` e `robots.txt` che blocca i motori di ricerca. Al passaggio
-sul dominio definitivo vanno tolti entrambi. I punti da completare sono evidenziati in giallo nella pagina
-(classe `da-completare`) e nei riquadri tratteggiati (classe `segnaposto`).
+**Online** su https://photolab4kids.it (GitHub Pages da `docs/`, dominio registrato su Aruba il 03/11/2026,
+intestato ad Alberto Broggi). I punti ancora da completare (classe `da-completare`) sono nascosti sul sito pubblico
+e compaiono in giallo nell'anteprima locale o aggiungendo `?bozza` all'indirizzo.
 
 ## Il concept: «L'altra metà»
 

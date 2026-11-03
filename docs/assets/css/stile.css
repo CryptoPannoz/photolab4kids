@@ -124,8 +124,9 @@ h1 em, h2 em, h3 em {
   letter-spacing: 0.04em;
 }
 
-/* Da completare: evidenziatore, per ritrovarli a colpo d'occhio */
-.da-completare {
+/* Da completare: evidenziatore, visibile solo in bozza (in locale o con ?bozza nell'indirizzo) */
+.da-completare { display: none; }
+.bozza .da-completare {
   display: inline-block;
   font-family: var(--grotesk);
   font-size: 13px;
@@ -136,7 +137,7 @@ h1 em, h2 em, h3 em {
   padding: 3px 8px;
   border-radius: 2px;
 }
-.da-completare::before { content: "✎ "; }
+.bozza .da-completare::before { content: "✎ "; }
 
 .segnaposto {
   border: 2px dashed currentColor;
@@ -919,7 +920,7 @@ section, .piede { scroll-margin-top: 60px; }
 }
 .piede h2 { max-width: 14ch; }
 .piede > p { max-width: 46ch; font-size: clamp(20px, 1rem + 0.8vw, 26px); line-height: 1.35; color: rgb(245 242 232 / 0.85); }
-.piede > .da-completare { font-size: 13px; color: #4d3b00; }
+.bozza .piede > .da-completare { font-size: 13px; color: #4d3b00; }
 .piede__fondo {
   margin-top: var(--sezione);
   padding-top: 24px;
