@@ -44,6 +44,18 @@ python3 -I tools/prepara-immagini.py ../PHOTOLAB4KIDS.pdf
 **Ritratti degli alunni**: pubblicati dal 03/11/2026, dopo la conferma di Vittoria che ci sono le liberatorie delle
 famiglie e il contratto con la scuola. I nomi scritti sui disegni restano comunque tagliati.
 
+## Logo e immagine di condivisione
+
+`tools/prepara-grafica.py` disegna con i font e i colori del sito il marchio (`docs/assets/logo/
+photolab4kids-marchio.png`, 1024 px), il logo orizzontale (scuro, chiaro e su carta), l'icona per i telefoni
+(`apple-touch-icon.png`) e l'immagine di condivisione `og.jpg` (1200×630).
+
+```bash
+python3 -I tools/prepara-grafica.py
+```
+
+Per Vittoria, che gestisce il sito: [GUIDA-VITTORIA.md](GUIDA-VITTORIA.md).
+
 ## Lavorarci
 
 Anteprima locale: configurazione `photolab4kids` in `../.claude/launch.json`, oppure
