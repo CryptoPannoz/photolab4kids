@@ -1,4 +1,4 @@
-/* Photolab for Kids — i colori dei capitoli vengono dalle pagine del libro del laboratorio */
+/* PhotoLab4Kids — i colori dei capitoli vengono dalle pagine del libro del laboratorio */
 
 @font-face {
   font-family: "Bricolage Grotesque";
@@ -111,14 +111,14 @@ h1 em, h2 em, h3 em {
   font-family: var(--grotesk);
   font-stretch: 75%;
   font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.14em;
+  font-size: clamp(15px, 0.82rem + 0.3vw, 18px);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 28px;
 }
 .etichetta span {
   display: inline-grid; place-items: center;
-  min-width: 34px; height: 24px; padding: 0 6px;
+  min-width: 2.9em; height: 1.95em; padding: 0 0.45em;
   border: 1.5px solid currentColor;
   border-radius: 3px;
   letter-spacing: 0.04em;
@@ -172,12 +172,38 @@ h1 em, h2 em, h3 em {
   white-space: nowrap;
 }
 .marchio em { font-family: var(--serif); font-weight: 400; font-style: italic; letter-spacing: 0; }
-.menu { display: flex; gap: clamp(14px, 2.4vw, 32px); font-family: var(--grotesk); font-size: 15px; font-weight: 500; }
+.menu { display: flex; align-items: center; gap: clamp(14px, 2.4vw, 32px); font-family: var(--grotesk); font-size: 15px; font-weight: 500; }
 .menu a { text-decoration: none; padding: 6px 0; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat; transition: background-size 0.25s; }
 .menu a:hover { background-size: 100% 1.5px; }
 .menu__contatti { color: var(--verde); }
-@media (max-width: 760px) {
-  .menu a:not(.menu__contatti) { display: none; }
+/* il pulsante delle donazioni: la testata è fissa, quindi resta a portata da ogni punto della pagina */
+.menu .menu__sostieni {
+  padding: 9px 16px;
+  background: var(--verde);
+  color: var(--carta);
+  font-weight: 700;
+  border-radius: 3px;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+.menu .menu__sostieni:hover { background-color: #0a5e39; }
+@media (max-width: 960px) {
+  .menu a:not(.menu__contatti):not(.menu__sostieni) { display: none; }
+}
+@media (max-width: 520px) {
+  .testata { gap: 12px; }
+  .testata .marchio { font-size: 18px; }
+  .menu { gap: 14px; font-size: 14px; }
+  .menu .menu__sostieni { padding: 8px 12px; }
+}
+/* sotto i 410 px «Contatti» non ci sta più accanto al pulsante: resta in fondo alla pagina */
+@media (max-width: 410px) {
+  .menu__contatti { display: none; }
+}
+@media (max-width: 359px) {
+  .testata { gap: 10px; }
+  .testata .marchio { font-size: 16px; }
+  .menu .menu__sostieni { padding: 7px 10px; font-size: 13px; }
 }
 
 section, .piede { scroll-margin-top: 60px; }
@@ -874,11 +900,8 @@ section, .piede { scroll-margin-top: 60px; }
   color: var(--carta);
 }
 .libro__foto { position: relative; }
-.libro__foto img {
-  -webkit-mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 62%, transparent 100%);
-  mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 62%, transparent 100%);
-}
-.libro__aperto { width: 70%; margin: -22% 0 0 auto; }
+.libro__copertina { width: 88%; }
+.libro__aperto { width: 72%; margin: -13% 0 0 auto; position: relative; }
 .libro__testo h2 { font-size: clamp(30px, 1.6rem + 2.2vw, 60px); max-width: 18ch; }
 .libro__testo p { color: rgb(245 242 232 / 0.8); max-width: 48ch; }
 @media (max-width: 860px) { .libro { grid-template-columns: 1fr; } }
@@ -993,3 +1016,52 @@ section, .piede { scroll-margin-top: 60px; }
   color: rgb(245 242 232 / 0.65);
 }
 .piede__fondo .marchio { font-size: 17px; color: var(--carta); }
+
+/* ——— Pagina «Sostieni un percorso» (sostieni/): donazione libera ——— */
+.dona {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: center;
+  min-height: 100svh;
+  padding: calc(60px + clamp(48px, 7vw, 112px)) max(var(--margine), calc((100% - var(--larghezza)) / 2)) var(--sezione);
+}
+.dona h1 { font-size: clamp(48px, 2rem + 5.4vw, 118px); letter-spacing: -0.04em; margin-bottom: 0.5em; }
+.dona h1 em { display: block; color: var(--verde); }
+.dona__testo { max-width: 40em; }
+.dona__testo > p:not(.grande):not(.dona__chiusa) { color: var(--inchiostro-tenue); max-width: 54ch; }
+.dona__chiusa {
+  font-family: var(--grotesk);
+  font-weight: 700;
+  font-size: clamp(22px, 1.1rem + 0.8vw, 30px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--verde);
+  max-width: 24ch;
+  margin-top: 1.4em;
+}
+.dona__azione { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin: 28px 0 32px; }
+.dona__azione .bottone { margin: 0; }
+.bottone--verde { background: var(--verde); color: var(--carta); padding: 20px 30px; font-size: 18px; }
+.bottone--verde:hover { background: #0a5e39; }
+.dona__nota { margin: 0; font-style: italic; color: var(--inchiostro-tenue); }
+.dona__altro { font-size: 0.9em; border-top: 1px solid rgb(27 29 31 / 0.15); padding-top: 18px; }
+.dona__altro a { color: var(--verde); font-weight: 600; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+/* le opere dei bambini, sparse come sul tavolo del laboratorio */
+.dona__opere { position: relative; aspect-ratio: 4 / 5; }
+.dona__opere img { position: absolute; box-shadow: 0 14px 36px rgb(27 29 31 / 0.18); }
+.dona__opere .d1 { width: 58%; left: 0; top: 4%; transform: rotate(-5deg); }
+.dona__opere .d2 { width: 46%; right: 2%; top: 0; transform: rotate(4deg); }
+.dona__opere .d3 { width: 44%; left: 22%; top: 42%; transform: rotate(-1.5deg); }
+.dona__opere .d4 { width: 118%; left: -14%; bottom: 0; box-shadow: none; transform: rotate(-4deg); }
+@media (max-width: 860px) {
+  .dona { grid-template-columns: 1fr; min-height: 0; }
+  .dona__opere { order: -1; width: min(100%, 400px); aspect-ratio: 2 / 1; margin-bottom: -8px; }
+  .dona__opere .d1 { width: 34%; left: 4%; }
+  .dona__opere .d2 { width: 25%; right: 10%; }
+  .dona__opere .d3 { width: 23%; left: 40%; top: 18%; }
+  .dona__opere .d4 { width: 92%; left: 2%; bottom: -10%; }
+}
+.piede--breve { padding-top: clamp(48px, 7vw, 96px); }
+.piede--breve .piede__fondo { margin-top: 40px; }
+.piede__fondo a { color: inherit; }

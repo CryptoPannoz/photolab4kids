@@ -3,7 +3,7 @@
 Uso:  python3 -I tools/prepara-immagini.py ../PHOTOLAB4KIDS.pdf
 Serve: pip install pymupdf pillow numpy
 
-Finiscono nel sito SOLO le immagini in ELENCO, GRIGLIE e FOTO_LIBRO. I ritratti degli alunni (pagine 34-44) ci sono
+Finiscono nel sito SOLO le immagini in ELENCO e GRIGLIE. I ritratti degli alunni (pagine 34-44) ci sono
 dal 03/11/2026, quando Vittoria ha confermato liberatorie delle famiglie e contratto con la scuola. I nomi scritti sui
 disegni restano tagliati.
 """
@@ -90,12 +90,6 @@ GRIGLIE = {
     "ritratto-bianco": 40,
 }
 
-
-# Foto del libro stampato (WhatsApp del 03/11/2026), nella cartella del PDF: nome → (file, riquadro in px)
-FOTO_LIBRO = {
-    "libro": ("WhatsApp Image 2026-11-03 at 18.43.41 (3).jpeg", (40, 520, 1290, 1720)),
-    "libro-aperto": ("WhatsApp Image 2026-11-03 at 18.43.41 (2).jpeg", (0, 780, 1500, 1720)),
-}
 
 
 def carica(doc, xref):
@@ -192,8 +186,6 @@ def main(pdf):
         foto.sort(key=lambda i: (round(i["bbox"][1] / 33), i["bbox"][0]))
         for k, info in enumerate(foto, 1):
             salva(raddrizza(carica(doc, info["xref"]), page, info["xref"]), f"{nome}-{k:02d}", 600)
-    for nome, (file, riquadro) in FOTO_LIBRO.items():
-        salva(Image.open(Path(pdf).parent / file).crop(riquadro), nome, 1400)
 
 
 if __name__ == "__main__":

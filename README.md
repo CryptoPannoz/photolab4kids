@@ -1,4 +1,4 @@
-# Photolab for Kids
+# PhotoLab4Kids
 
 Sito del laboratorio di fotografia e creatività ideato da Vittoria Lorenzetti per la scuola primaria e
 secondaria di primo grado. Sito statico in `docs/`: HTML, CSS e JS senza dipendenze, font self-hosted
@@ -25,7 +25,12 @@ Il sito ne fa il suo linguaggio:
   vedo così), rosa (collage), confetto (autoritratti), lavagna (dentro di me c'è), bianco con stelle d'oro
   (ogni sogno merita spazio).
 - **Ritratti**: i set su sfondo nero e bianco sono due provini su pellicola, con il numero di ogni fotogramma.
-- **Formati**: tre rullini (36, 24, 12 pose) per i percorsi di 6 mesi, 3 mesi e un weekend.
+- **Percorsi**: tre rullini (36, 24, 12 pose) per i percorsi di 6 mesi, 3 mesi e un weekend.
+- **Sostieni un percorso**: il pulsante verde nella testata fissa e quello della sezione 10 portano alla pagina
+  `docs/sostieni/` (testo di Vittoria), con la donazione libera su PayPal.me (paypal.me/vlorenzetti982, l'importo lo
+  sceglie chi dona).
+
+Il nome si scrive **PhotoLab4Kids**, come il dominio (richiesta di Vittoria del 05/11/2026).
 
 Testi: dal PDF del libro (`../PHOTOLAB4KIDS.pdf`, Canva, agosto 2026) e dal racconto di Vittoria. Foto, biografia e
 contatti di Vittoria dal suo sito (vittorialorenzetti.com/about), come le 22 foto del flusso (`flusso-NN.webp`);
@@ -36,6 +41,10 @@ logo dal sito della Fondazione Comoli Ferrari.
 Estratte dal PDF con `tools/prepara-immagini.py` (PyMuPDF + Pillow + numpy) e salvate in WebP in
 `docs/assets/img/`. Lo script raddrizza le immagini che Canva salva ruotate, separa foto e disegno quando stanno
 nello stesso file e taglia i nomi dei bambini scritti sui fogli.
+
+Il secondo disegno della radura (`sentiero-disegno-c.webp`) non viene dal libro: nel PDF i due disegni erano quasi
+uguali e Vittoria ha chiesto un disegno diverso, generato il 05/11/2026 con GPT Image 2 (Higgsfield) dalla foto della
+radura.
 
 ```bash
 python3 -I tools/prepara-immagini.py ../PHOTOLAB4KIDS.pdf
@@ -48,7 +57,9 @@ famiglie e il contratto con la scuola. I nomi scritti sui disegni restano comunq
 
 `tools/prepara-grafica.py` disegna con i font e i colori del sito il marchio (`docs/assets/logo/
 photolab4kids-marchio.png`, 1024 px), il logo orizzontale (scuro, chiaro e su carta), l'icona per i telefoni
-(`apple-touch-icon.png`) e l'immagine di condivisione `og.jpg` (1200×630).
+(`apple-touch-icon.png`), l'immagine di condivisione `og-photolab4kids.jpg` (1200×630) e il libro della sezione 08, chiuso
+(`libro-copertina.webp`) e aperto (`libro-pagine.webp`): copertina in carta con il dorso in tela verde, il titolo
+«Laboratorio di fotografia e creatività per bambini» e il serpente.
 
 ```bash
 python3 -I tools/prepara-grafica.py

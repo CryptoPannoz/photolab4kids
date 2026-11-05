@@ -1,4 +1,4 @@
-# Photolab for Kids — guida per Vittoria
+# PhotoLab4Kids — guida per Vittoria
 
 Il sito è tuo: questa guida spiega dove sta, come entrarci e come cambiarlo da sola.
 
@@ -10,6 +10,8 @@ Il sito è tuo: questa guida spiega dove sta, come entrarci e come cambiarlo da 
 - **Hosting**: GitHub Pages, gratis. Ogni modifica salvata su GitHub va online da sola in 1-2 minuti.
 - **Dominio**: photolab4kids.it, registrato su Aruba il 03/11/2026 a nome di Alberto, con rinnovo automatico
   ogni 3 novembre (11,99 € + IVA l'anno).
+- **Donazioni**: la pagina https://photolab4kids.it/sostieni/ porta al tuo PayPal.me (paypal.me/vlorenzetti982).
+  Il testo sta in `docs/sostieni/index.html` e si cambia come quello della pagina principale.
 - **Logo**: in `docs/assets/logo/` (marchio quadrato e logo orizzontale, scuro e chiaro), scaricabili anche da
   https://photolab4kids.it/assets/logo/photolab4kids-logo.png
 

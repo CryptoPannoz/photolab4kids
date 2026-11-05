@@ -1,4 +1,4 @@
-# Photolab for Kids — istruzioni per Claude
+# PhotoLab4Kids — istruzioni per Claude
 
 Sito del laboratorio di fotografia di Vittoria Lorenzetti (cugina di Alberto). Concept, struttura e immagini sono
 nel `README.md`; punti aperti e cose da non pubblicare in `NOTE-INTERNE.md` (fuori da git).
